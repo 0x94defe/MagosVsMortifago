@@ -2,9 +2,12 @@ package sim;
 import hogwarts.AHabilidad;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class SimuladorTurnos {
@@ -12,6 +15,7 @@ public class SimuladorTurnos {
     Map<Integer, Integer> bandosConEntidadesVivas;
     private final Grilla grilla;
     private final Bando bando;
+    private final Map<Entidad, Set<Integer>> habilidadesLanzadasEnRonda;
     private Entidad entidadActual;
     private EEstadoJuego estadoJuego;
     private int rondaActual;
@@ -25,6 +29,7 @@ public class SimuladorTurnos {
         this.bandosConEntidadesVivas = new LinkedHashMap<>();
         this.grilla = new Grilla(ancho, alto);
         this.bando = escena.getBandosDisponibles();
+        this.habilidadesLanzadasEnRonda = new HashMap<>();
         this.estadoJuego = EEstadoJuego.EN_CURSO;
         this.rondaActual = 1;
         this.indiceActual = 0;
@@ -61,6 +66,7 @@ public class SimuladorTurnos {
     public void terminarRonda() {
         System.out.println("Ronda #" + rondaActual + " terminada!!");
         rondaActual++;
+        habilidadesLanzadasEnRonda.clear();
         indiceActual = 0;
         procesarTurno();
     }
@@ -78,6 +84,7 @@ public class SimuladorTurnos {
             if (e.puedeActuar() && !e.estaVivo()) {
                 System.out.println(e.getNombre() + " ha sido eliminado.");
                 actualizarEstadoBandos(e.getIdBando());
+                habilidadesLanzadasEnRonda.remove(e);
                 grilla.quitarEntidad(e);
                 entidades.remove(i);
                 // ajustar índice si el muerto era anterior al actual
@@ -138,7 +145,9 @@ public class SimuladorTurnos {
 
         List<AHabilidad> resultado = new ArrayList<>();
         for (AHabilidad h : entidadActual.getHabilidadesDisponibles()) {
-            if (h.esHabilidadOfensiva() == esEnemigo) resultado.add(h);
+            if (h.esHabilidadOfensiva() == esEnemigo && !habilidadYaLanzadaEnRonda(entidadActual, h)) {
+                resultado.add(h);
+            }
         }
         return resultado;
     }
@@ -150,6 +159,10 @@ public class SimuladorTurnos {
 
     public boolean lanzarHabilidad(AHabilidad h, Entidad objetivoIntentado) {
         if (entidadActual == null || !entidadActual.puedeActuar()) return false;
+        if (habilidadYaLanzadaEnRonda(entidadActual, h)) {
+            System.out.println(entidadActual.getNombre() + " ya usó " + h.getNombre() + " en esta ronda.");
+            return false;
+        }
 
         Entidad objetivo = resolverLineaDeTiro(entidadActual, objetivoIntentado, h.getDistanciaAtaque());
         if (objetivo == null) return false;
@@ -159,6 +172,7 @@ public class SimuladorTurnos {
 
         boolean fueLanzado = entidadActual.usarHabilidad(h, objetivo);
         if (fueLanzado) {
+            registrarHabilidadUsada(entidadActual, h);
             System.out.println(h.getNombre() + " lanzado a: " + objetivo.getNombre());
             // Verificar victoria inmediatamente tras el ataque
             limpiarMuertos();
@@ -221,6 +235,20 @@ public class SimuladorTurnos {
             if (en != null) return en;
         }
         return objetivo;
+    }
+
+    private void registrarHabilidadUsada(Entidad lanzador, AHabilidad habilidad) {
+        int idHabilidad = habilidad.getNombre().trim().toUpperCase().replace(" ", "_").hashCode();
+        habilidadesLanzadasEnRonda
+            .computeIfAbsent(lanzador, k -> new HashSet<>())
+            .add(idHabilidad);
+    }
+
+    private boolean habilidadYaLanzadaEnRonda(Entidad lanzador, AHabilidad habilidad) {
+        Set<Integer> habilidadesYaUsadas = habilidadesLanzadasEnRonda.get(lanzador);
+        if (habilidadesYaUsadas == null) return false;
+        int idHabilidad = habilidad.getNombre().trim().toUpperCase().replace(" ", "_").hashCode();
+        return habilidadesYaUsadas.contains(idHabilidad);
     }
 
     private int distancia(Entidad a, Entidad b) { //distanciaChebyshev 
