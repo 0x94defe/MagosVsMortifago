@@ -1,4 +1,4 @@
-package tests;
+package test;
 
 import app.BandoManager;
 import hogwarts.AHabilidad;
@@ -11,8 +11,8 @@ import sim.SimuladorTurnos;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 class SimuladorTurnosTest {
 

@@ -1,18 +1,17 @@
-package tests;
+package test;
 
 import hogwarts.AHabilidad;
 import hogwarts.CMagoAuror;
 import hogwarts.CMortifagoComandante;
 import hogwarts.CMortifagoLacayo;
 import hogwarts.FLibroDeHechizos;
-import org.junit.jupiter.api.Test;
 import sim.Entidad;
 import sim.RBandoToken;
 import sim.RCoordenada;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class HechizosTest {
 

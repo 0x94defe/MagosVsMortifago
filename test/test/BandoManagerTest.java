@@ -1,12 +1,12 @@
-package tests;
+package test;
 
 import app.BandoManager;
-import org.junit.jupiter.api.Test;
 import sim.Bando;
 import sim.ETipoRelacion;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class BandoManagerTest {
 

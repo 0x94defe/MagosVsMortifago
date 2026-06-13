@@ -1,18 +1,18 @@
-package tests;
+package test;
 
 import hogwarts.CMagoAuror;
 import hogwarts.CPersonajeMago;
 import hogwarts.CPersonajeMortifago;
 import hogwarts.EFaccion;
 import hogwarts.FLibroDeHechizos;
-import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class PersonajesTest {
 

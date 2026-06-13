@@ -1,18 +1,16 @@
-package tests;
+package test;
 
 import app.BandoManager;
 import hogwarts.AHabilidad;
 import hogwarts.CMortifagoComandante;
 import hogwarts.CMortifagoLacayo;
-import org.junit.jupiter.api.Test;
 import sim.Entidad;
 import sim.Escenario;
 import sim.SimuladorTurnos;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class ReglaRondaHechizosTest {
 
@@ -104,3 +102,4 @@ class ReglaRondaHechizosTest {
             .orElseThrow();
     }
 }
+
