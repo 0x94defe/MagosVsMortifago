@@ -1,0 +1,73 @@
+@startuml
+
+' Interfaz para quitarle acoplamiento al Hechizo
+interface Afectable {
+    +void recibirDanio(cantidad: Int)
+    +void recibirCuracion(cantidad: Int)
+}
+
+interface Hechizo {
+    +void ejecutar(objetivo: Personaje)
+}
+
+enum LibroDeHechizos implements Hechizo {
+    EXPELLIARMUS
+    AVADA_KEDAVRA
+    PROTEGO
+    EXPECTO_PATRONUM
+    +void ejecutar(objetivo: Personaje)
+}
+
+LibroDeHechizos ..> Afectable : aplica efecto a >
+
+
+abstract class Personaje implements Afectable {
+    #String nombre
+    -Int puntosMana
+    -Int puntosSalud
+    #List<Hechizo> hechizosDisponibles = null
+
+
+    +void recibirDanio(cantidad: Int)
+    +void recibirCuracion(cantidad: Int)
+    +void aplicarEscudo()
+    +void lanzarHechizo(hechizo: Hechizo, objetivo: Personaje)
+}
+
+' Se especializa en hechizos defensivos y de ataque
+abstract class Mago extends Personaje { 
+
+}
+
+' final
+class Auror extends Mago {
+    +Auror(nombre: String)
+}
+' final
+class Profesor extends Mago {
+    +Profesor(nombre: String)
+}
+' final
+class Estudiante extends Mago {
+    +Estudiante(nombre: String)
+}
+
+
+' Se enfoca en ataques oscuros y habilidades especiales
+abstract class Mortifago extends Personaje { 
+
+}
+' final
+class Comandante extends Mortifago {
+    +Comandante(nombre: String)
+}
+' final
+class Lacayo extends Mortifago {
+    +Lacayo(nombre: String)
+}
+
+
+' Relación de Asociación (Reemplaza a List<Hechizo>)
+Personaje "1" --> "*" Hechizo : tiene disponibles
+
+@enduml
