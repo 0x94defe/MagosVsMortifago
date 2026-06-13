@@ -22,8 +22,12 @@ public class CHechizo extends AHabilidad implements Cloneable {
     }
 
     public CHechizo clonar() {
-        try { return (CHechizo) super.clone(); } 
-        catch (CloneNotSupportedException e) { throw new AssertionError(); }
+        try { 
+            return (CHechizo) super.clone(); 
+        } 
+        catch (CloneNotSupportedException e) { 
+            throw new AssertionError(); 
+        }
     }
     
     
@@ -51,7 +55,12 @@ public class CHechizo extends AHabilidad implements Cloneable {
     }
 
 	@Override
-	public boolean esHabilidadOfensiva() { return tipoHechizo.esOfensivo(); }
+	public boolean esHabilidadOfensiva() { 
+        return tipoHechizo.esOfensivo(); 
+    }
+    
 	@Override
-	public boolean esHabilidadEspecial() { return tipoHechizo.esEspecial(); }
+	public boolean esHabilidadEspecial() { 
+        return tipoHechizo.esEspecial(); 
+    }
 }

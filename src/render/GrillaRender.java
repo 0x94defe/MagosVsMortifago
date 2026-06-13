@@ -152,12 +152,31 @@ public class GrillaRender extends JPanel {
         repaint();
     }
 
-    public boolean isMovimientoValido()                                    { return movimientoValido; }
-    public int getCeldaMovX()                                              { return celdaMovX; }
-    public int getCeldaMovY()                                              { return celdaMovY; }
-    public Entidad getObjetivo()                                           { return objetivo; }
+    public boolean isMovimientoValido() { 
+        return movimientoValido; 
+    }
 
-    public void setOnObjetivoSeleccionado(Consumer<Entidad> cb)            { this.onObjetivoSeleccionado = cb; }
-    public void setOnCeldaVaciaSeleccionada(BiConsumer<Integer, Integer> cb){ this.onCeldaVaciaSeleccionada = cb; }
-    public void setOnInspeccionado(Consumer<Entidad> cb)                   { this.onInspeccionado = cb; }
+    public int getCeldaMovX() { 
+        return celdaMovX; 
+    }
+
+    public int getCeldaMovY() { 
+        return celdaMovY; 
+    }
+
+    public Entidad getObjetivo() { 
+        return objetivo; 
+    }
+
+    public void setOnObjetivoSeleccionado(Consumer<Entidad> cb) { 
+        this.onObjetivoSeleccionado = cb; 
+    }
+
+    public void setOnCeldaVaciaSeleccionada(BiConsumer<Integer, Integer> cb){ 
+        this.onCeldaVaciaSeleccionada = cb; 
+    }
+    
+    public void setOnInspeccionado(Consumer<Entidad> cb) { 
+        this.onInspeccionado = cb; 
+    }
 }

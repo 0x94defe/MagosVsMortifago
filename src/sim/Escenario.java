@@ -46,11 +46,26 @@ public class Escenario {
         return spawnPoints.putIfAbsent(coor, new RInstanciableConBando(i, idBando)) == null;
     }
 
-    public String getNombre() { return nombre; }
-    public Bando getBandosDisponibles() { return bandos; }
-    public Map<RCoordenada, RInstanciableConBando> getSpawnPoints() { return this.spawnPoints; }
-    public List<CPersonajeMortifago> getMortifagos() { return this.mortifagos; }
-    public List<CPersonajeMago> getMagos() { return this.magos; }
+    public String getNombre() { 
+        return nombre; 
+    }
+
+    public Bando getBandosDisponibles() { 
+        return bandos; 
+    }
+
+    public Map<RCoordenada, RInstanciableConBando> getSpawnPoints() { 
+        return this.spawnPoints; 
+    }
+
+    public List<CPersonajeMortifago> getMortifagos() { 
+        return this.mortifagos; 
+    }
+
+    public List<CPersonajeMago> getMagos() { 
+        return this.magos; 
+    }
+
     public List<APersonaje> getTodosLosPersonajes() {
         List<APersonaje> todos = new ArrayList<>();
         
@@ -59,6 +74,7 @@ public class Escenario {
         
         return todos;
     }
+    
     public List<IInstanciable> getTodasLosInstanciables() {
         List<IInstanciable> listaDesenvuelta = new ArrayList<>();
 

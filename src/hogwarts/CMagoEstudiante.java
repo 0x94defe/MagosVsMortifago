@@ -10,5 +10,7 @@ public final class CMagoEstudiante extends CPersonajeMago {
     }
     
 	@Override
-	public String getClase() { return "Estudiante";	}
+	public String getClase(){ 
+		return "Estudiante";	
+	}
 }

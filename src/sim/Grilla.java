@@ -52,13 +52,19 @@ public class Grilla {
     }
 
 
-    public Entidad getEntidad(int x, int y) { return celdas[x][y]; }
-    public boolean estaLibre(int x, int y)  { return celdas[x][y] == null; }
+    public Entidad getEntidad(int x, int y) { 
+        return celdas[x][y]; 
+    }
+
+    public boolean estaLibre(int x, int y)  { 
+        return celdas[x][y] == null; 
+    }
     
     
     public boolean estaFueraDeGrilla(int x, int y) {
     	return x < 0 || x >= ancho || y < 0 || y >= alto;
     }
+    
     private RCoordenada buscarCeldaLibreAdyacente(int x, int y) {
         // Definimos los movimientos para mirar: Abajo, Arriba, Derecha, Izquierda
         int[] frentesX = {0,  0, 1, -1};

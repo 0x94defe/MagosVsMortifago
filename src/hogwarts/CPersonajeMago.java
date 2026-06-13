@@ -24,7 +24,12 @@ public class CPersonajeMago extends APersonaje {
 
 
     @Override
-    public final EFaccion getFaccion() { return FACCION; } //al ponerle final ninguna subclase se manda cagadas
+    public final EFaccion getFaccion(){ 
+		return FACCION; 
+	} //al ponerle final ninguna subclase se manda cagadas
+
 	@Override
-	public String getClase() { return "Mago Raso"; }
+	public String getClase(){ 
+		return "Mago Raso"; 
+	}
 }

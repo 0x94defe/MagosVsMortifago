@@ -70,8 +70,13 @@ public class VentanaJuego extends JFrame {
         });
     }
 
-    public void mostrar()   { SwingUtilities.invokeLater(() -> frame.setVisible(true)); }
-    public void refrescar() { mapRender.repaint(); }
+    public void mostrar() { 
+        SwingUtilities.invokeLater(() -> frame.setVisible(true)); 
+    }
+
+    public void refrescar() { 
+        mapRender.repaint(); 
+    }
 
 
     private JPanel crearBarraInferior() {

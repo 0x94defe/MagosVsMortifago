@@ -12,30 +12,47 @@ public class Bando {
         this.matrizRelaciones = matrizRelaciones;
     }
     
-  //---------------
-    public String[] getBandosDisponibles() {return Arrays.copyOf(nombreBandos, nombreBandos.length); }
+    //---------------
+    public String[] getBandosDisponibles() { 
+      return Arrays.copyOf(nombreBandos, nombreBandos.length); 
+    }
+
     public RBandoToken getBandoToken(int pos) {
-    	if (pos >= nombreBandos.length || pos < 0) throw new IllegalArgumentException("Fuera de rango");
+    	if (pos >= nombreBandos.length || pos < 0){
+        throw new IllegalArgumentException("Fuera de rango");
+      }
     	
     	return new RBandoToken(pos, nombreBandos[pos]);
     }
     
-  //---------------
-    public int getCantidadBandos() { return nombreBandos.length; }
+    //---------------
+    public int getCantidadBandos() { 
+      return nombreBandos.length; 
+    }
+
     public String getBandoParticular(int pos) {
-    	if (pos >= nombreBandos.length || pos < 0) throw new IllegalArgumentException("Fuera de rango");
+    	if (pos >= nombreBandos.length || pos < 0) {
+        throw new IllegalArgumentException("Fuera de rango");
+      }
     	
     	return nombreBandos[pos]; 
     }
     
     //---------------
     public ETipoRelacion getRelacion(int miBandoId, int bandoObjetivoId) {
-    	if (miBandoId >= nombreBandos.length || miBandoId < 0 || bandoObjetivoId >= nombreBandos.length || bandoObjetivoId < 0) 
-    		throw new IllegalArgumentException("Fuera de rango");
+    	if (miBandoId >= nombreBandos.length || miBandoId < 0 || bandoObjetivoId >= nombreBandos.length || bandoObjetivoId < 0) {
+        throw new IllegalArgumentException("Fuera de rango");
+      }    
     	
     	int ordinal = matrizRelaciones[miBandoId][bandoObjetivoId] + 1;
     	return ETipoRelacion.values()[ordinal];
     }
-    public boolean esAmigo(int a, int b) { return getRelacion(a, b) == ETipoRelacion.AMIGO; }
-    public boolean esEnemigo(int a, int b) { return getRelacion(a, b) == ETipoRelacion.ENEMIGO; }
+
+    public boolean esAmigo(int a, int b) { 
+      return getRelacion(a, b) == ETipoRelacion.AMIGO; 
+    }
+
+    public boolean esEnemigo(int a, int b) { 
+      return getRelacion(a, b) == ETipoRelacion.ENEMIGO; 
+    }
 }

@@ -14,23 +14,33 @@ public class PersonajeManager {
 
 
     public CPersonajeMago crearMagoSiNoExiste(FCatalogoDePersonajes tipo) {
-    	if (tipo.getFaccion() != EFaccion.MAGO) 
-    		throw new IllegalArgumentException("No coincide el personaje con su faccion");
+    	if (tipo.getFaccion() != EFaccion.MAGO) {
+			throw new IllegalArgumentException("No coincide el personaje con su faccion");
+		}
     	
     	APersonaje pm = tipo.construir();
     	instancias.put(tipo, pm);
     	return (CPersonajeMago) pm;
     }
     public CPersonajeMortifago crearMortifagoSiNoExiste(FCatalogoDePersonajes tipo) {
-    	if (tipo.getFaccion() != EFaccion.MORTIFAGO) 
-    		throw new IllegalArgumentException("No coincide el personaje con su faccion");
+    	if (tipo.getFaccion() != EFaccion.MORTIFAGO) {
+			throw new IllegalArgumentException("No coincide el personaje con su faccion");
+		}
     	
     	APersonaje pm = tipo.construir();
     	instancias.put(tipo, pm);
     	return (CPersonajeMortifago) pm;
     }
     
-    public APersonaje obtener(FCatalogoDePersonajes tipo) { return instancias.get(tipo); } 
-    public void eliminar(FCatalogoDePersonajes tipo) { instancias.remove(tipo); }
-    public Map<FCatalogoDePersonajes, APersonaje> getPersonajesInstanciados() { return Map.copyOf(instancias); }
+    public APersonaje obtener(FCatalogoDePersonajes tipo) { 
+		return instancias.get(tipo); 
+	} 
+
+    public void eliminar(FCatalogoDePersonajes tipo) { 
+		instancias.remove(tipo); 
+	}
+
+    public Map<FCatalogoDePersonajes, APersonaje> getPersonajesInstanciados() { 
+		return Map.copyOf(instancias); 
+	}
 }

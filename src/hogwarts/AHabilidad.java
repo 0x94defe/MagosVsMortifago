@@ -12,11 +12,11 @@ public abstract class AHabilidad {
     private final Set<EFaccion> faccionesPermitidas;
 
     protected AHabilidad(String nombre, String descr, int coste, int distancia, Set<EFaccion> faccionesPermitidas) {
-        this.nombre = nombre;
-		this.descripcion = descr;
-        this.coste = coste;
-        this.distancia = distancia;
-        this.faccionesPermitidas = faccionesPermitidas;
+        this.nombre                 = nombre;
+		this.descripcion            = descr;
+        this.coste                  = coste;
+        this.distancia              = distancia;
+        this.faccionesPermitidas    = faccionesPermitidas;
     }
 
     @Override
@@ -40,8 +40,19 @@ public abstract class AHabilidad {
     public abstract boolean esHabilidadOfensiva();
     public abstract boolean esHabilidadEspecial();
     
-    public String getNombre() { return nombre; }
-	public int getCosteRecurso() { return coste; }
-	public int getDistanciaAtaque() { return distancia; }
-	public Set<EFaccion> getFaccionesPermitidas() { return Set.copyOf(faccionesPermitidas); }
+    public String getNombre(){ 
+        return nombre; 
+    }
+
+	public int getCosteRecurso(){ 
+        return coste; 
+    }
+
+	public int getDistanciaAtaque(){ 
+        return distancia; 
+    }
+    
+	public Set<EFaccion> getFaccionesPermitidas(){ 
+        return Set.copyOf(faccionesPermitidas); 
+    }
 }

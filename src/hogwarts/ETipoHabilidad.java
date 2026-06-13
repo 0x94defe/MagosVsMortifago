@@ -20,8 +20,17 @@ public enum ETipoHabilidad {
         this.especial = especial;
     }
 
-    public String getStat() { return this.stat; }
-    public boolean esOfensivo() { return this.ofensivo; }
-    public boolean esCurativo() { return this.curativo; }
-    public boolean esEspecial() { return this.especial; }
+    public String getStat() { 
+        return this.stat; 
+    }
+
+    public boolean esOfensivo() { 
+        return this.ofensivo; 
+    }
+    public boolean esCurativo() { 
+        return this.curativo; 
+    }
+    public boolean esEspecial() { 
+        return this.especial; 
+    }
 }

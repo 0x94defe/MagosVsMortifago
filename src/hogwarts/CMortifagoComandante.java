@@ -10,5 +10,7 @@ public final class CMortifagoComandante extends CPersonajeMortifago {
     }
     
 	@Override
-	public String getClase() { return "Comandandte";	}
+	public String getClase(){ 
+        return "Comandante";	
+	}
 }

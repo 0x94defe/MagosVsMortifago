@@ -80,9 +80,14 @@ public class TemasUI {
             }
 
             @Override
-            protected JButton createDecreaseButton(int orientation) { return crearBotonOculto(); }
+            protected JButton createDecreaseButton(int orientation) { 
+                return crearBotonOculto(); 
+            }
             @Override
-            protected JButton createIncreaseButton(int orientation) { return crearBotonOculto(); }
+
+            protected JButton createIncreaseButton(int orientation) { 
+                return crearBotonOculto(); 
+            }
 
             private JButton crearBotonOculto() {
                 JButton b = new JButton();

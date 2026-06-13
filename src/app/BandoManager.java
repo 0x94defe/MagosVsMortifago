@@ -33,8 +33,9 @@ public class BandoManager {
     	Integer idBandoA = bandosRegistrados.get(bandoA.toUpperCase());
     	Integer idBandoB = bandosRegistrados.get(bandoB.toUpperCase());
     	
-    	if (idBandoA == null || idBandoB == null)
-    		throw new IllegalArgumentException("Hay un bando que no existe, revisar.");
+    	if (idBandoA == null || idBandoB == null){
+            throw new IllegalArgumentException("Hay un bando que no existe, revisar.");
+        }
     	
     	relaciones.add(new Relacion(idBandoA, idBandoB,tipoRelacion));
     	

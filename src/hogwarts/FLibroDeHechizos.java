@@ -12,10 +12,20 @@ public enum FLibroDeHechizos {
 
 
     private final CHechizo prototipo;
-    FLibroDeHechizos(CHechizo prototipo) { this.prototipo = prototipo; }
+    FLibroDeHechizos(CHechizo prototipo) { 
+        this.prototipo = prototipo; 
+    }
 
-    public Set<EFaccion> getFacciones() { return prototipo.getFaccionesPermitidas(); }
-    public CHechizo construir() { return prototipo.clonar(); }
-    public AHabilidad getPrototipo() { return prototipo; }
-    public String getDescripcion() { return prototipo.toString(); }
+    public Set<EFaccion> getFacciones() { 
+        return prototipo.getFaccionesPermitidas(); 
+    }
+    public CHechizo construir() { 
+        return prototipo.clonar(); 
+    }
+    public AHabilidad getPrototipo() { 
+        return prototipo; 
+    }
+    public String getDescripcion() { 
+        return prototipo.toString(); 
+    }
 }

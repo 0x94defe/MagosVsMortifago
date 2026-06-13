@@ -10,5 +10,7 @@ public final class CMortifagoLacayo extends CPersonajeMortifago {
     }
     
 	@Override
-	public String getClase() { return "Lacayo";	}
+	public String getClase(){ 
+        return "Lacayo";	
+	}
 }

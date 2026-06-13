@@ -18,17 +18,21 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
     private final Map<FLibroDeHechizos, CHechizo> hechizosDisponibles;
 
     protected APersonaje(String nombre, String descr, int puntosSalud, int puntosMana, int movimiento, Map<FLibroDeHechizos, CHechizo> hechizos) {
-        this.nombre = nombre;
-        this.descripcion = descr;
-        this.puntosSalud = puntosSalud;
-        this.puntosMana = puntosMana;
-        this.movimiento = movimiento;
-        this.hechizosDisponibles = hechizos;
+        this.nombre                 = nombre;
+        this.descripcion            = descr;
+        this.puntosSalud            = puntosSalud;
+        this.puntosMana             = puntosMana;
+        this.movimiento             = movimiento;
+        this.hechizosDisponibles    = hechizos;
     }
 
     public APersonaje clonar() {
-        try { return (APersonaje) super.clone(); } 
-        catch (CloneNotSupportedException e) { throw new AssertionError(); }
+        try { 
+            return (APersonaje) super.clone(); 
+        } 
+        catch (CloneNotSupportedException e) { 
+            throw new AssertionError(); 
+        }
     }
     
     
@@ -63,21 +67,41 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
     
     // interfaze instnciable
     @Override
-	public String getNombre()      { return nombre; }
+	public String getNombre(){ 
+        return nombre; 
+    }
+
     @Override
-	public String getDescripcion() { return descripcion; }
+	public String getDescripcion(){ 
+        return descripcion; 
+    }
+
     @Override
     public abstract EFaccion getFaccion();
+
     @Override
     public abstract String getClase();
+
     @Override
-	public String getDatosEspecificos() { return datosDePersonaje(); }
+	public String getDatosEspecificos(){ 
+        return datosDePersonaje(); 
+    }
+
     @Override
-	public int getPuntosSalud()    { return puntosSalud; }
+	public int getPuntosSalud(){ 
+        return puntosSalud; 
+    }
+
     @Override
-	public int getPuntosRecurso()  { return puntosMana; }
+	public int getPuntosRecurso(){ 
+        return puntosMana; 
+    }
+
     @Override
-	public int getVelocidad()      { return movimiento; }
+	public int getVelocidad(){ 
+        return movimiento; 
+    }
+
     @Override
     public Map<Integer, AHabilidad> getHabilidades() {
         Map<Integer, AHabilidad> mapaFormateado = new HashMap<>();
@@ -89,16 +113,24 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
         
         return mapaFormateado;
     }
+    
     @Override
-    public boolean puedeActuar() { return true; }
+    public boolean puedeActuar(){ 
+        return true; 
+    }
+
     @Override
-    public boolean puedeMoverse() { return true; }
+    public boolean puedeMoverse(){ 
+        return true; 
+    }
       
     // Getters
-    public CHechizo[] getHechizosDisponibles() { return hechizosDisponibles.values().toArray(new CHechizo[0]); }
+    public CHechizo[] getHechizosDisponibles(){ 
+        return hechizosDisponibles.values().toArray(new CHechizo[0]); 
+    }
 
     
-    //helper para los hijos, necesitar ser static para llamarlo en super()
+    //helper para los hijos, necesita ser static para llamarlo en super()
     protected static Map<FLibroDeHechizos, CHechizo> construirHechizos(EFaccion faccion, FLibroDeHechizos[] a, FLibroDeHechizos[] b) {
     	Set<FLibroDeHechizos> todoJunto = new HashSet<>();
     	todoJunto.addAll(Arrays.asList(a));

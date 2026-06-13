@@ -39,7 +39,9 @@ public class Entidad implements IAfectable {
     
     public boolean usarHabilidad(AHabilidad habilidad, Entidad objetivo) {	
     	int calc = this.puntosRecurso - habilidad.getCosteRecurso();
-    	if (calc < 0) return false;
+    	if (calc < 0) {
+            return false;
+        }
     	this.puntosRecurso = calc;
     	getHabilidadPersonal(habilidad).ejecutar(this, objetivo);
         return true;
@@ -63,15 +65,23 @@ public class Entidad implements IAfectable {
     @Override
     public void recibirEfecto(ETipoEncantamiento efecto, int duracion) {
         switch (efecto) {
-            case ESCUDO:   this.escudoActivo += duracion; break;
-            case ATURDIR:  this.aturdido     += duracion; break;
+            case ESCUDO:   
+                this.escudoActivo += duracion; 
+                break;
+            case ATURDIR:  
+                this.aturdido     += duracion; 
+                break;
+            default: 
+                throw new IllegalArgumentException("Efecto desconocido: " + efecto);
         }
     }
 	@Override
 	public AHabilidad getHabilidadPersonal(AHabilidad habilidad) {
 		int idNumerico = habilidad.getNombre().trim().toUpperCase().replace(" ", "_").hashCode();
 		AHabilidad habilidadDeLaEntidad = habilidadesDisponibles.get(idNumerico);
-		if (habilidadDeLaEntidad == null) throw new IllegalStateException("No existe habilidad: '" + habilidad + "' para la entidad: '" + ref.getNombre() + "'");
+		if (habilidadDeLaEntidad == null) {
+            throw new IllegalStateException("No existe habilidad: '" + habilidad + "' para la entidad: '" + ref.getNombre() + "'");
+        }
 		return habilidadDeLaEntidad;
 	}
 
@@ -101,20 +111,62 @@ public class Entidad implements IAfectable {
         return sb.toString();
     }
     
-    public IInstanciable getInstanciable() { return ref; }
-    public String getNombre()      { return ref.getNombre(); }
-    public int getIdBando() 	   { return bando.id(); }
-    public String getNombreBando() { return bando.nombre(); }
-    public int getMovimiento() 	   { return movimiento; }
-    public int getPuntosMana() 	   { return puntosRecurso; }
-    public List<AHabilidad> getHabilidadesDisponibles() { return new ArrayList<>(habilidadesDisponibles.values()); }
-    public boolean estaVivo()      { return puntosSalud > 0; }
-    public boolean estaAturdido()  { return aturdido > 0; }
-    public boolean estaProtegido() { return escudoActivo > 0; }
-    public boolean puedeActuar()   { return ref.puedeActuar(); }
-    public boolean puedeMoverse()  { return ref.puedeMoverse(); }
-    public int getPosX() { return coor.posX(); }
-    public int getPosY() { return coor.posY(); }
+    public IInstanciable getInstanciable() { 
+        return ref;
+    }
+
+    public String getNombre() { 
+        return ref.getNombre(); 
+    }
+
+    public int getIdBando() { 
+        return bando.id(); 
+    }
+    public String getNombreBando() { 
+        return bando.nombre(); 
+    }
+
+    public int getMovimiento() { 
+        return movimiento; 
+    }
+
+    public int getPuntosMana() { 
+        return puntosRecurso; 
+    }
+
+    public List<AHabilidad> getHabilidadesDisponibles() { 
+        return new ArrayList<>(habilidadesDisponibles.values()); 
+    }
+
+    public boolean estaVivo() { 
+        return puntosSalud > 0; 
+    }
+
+    public boolean estaAturdido() { 
+        return aturdido > 0; 
+    }
+
+    public boolean estaProtegido() { 
+        return escudoActivo > 0; 
+    }
+
+    public boolean puedeActuar() { 
+        return ref.puedeActuar(); 
+    }
+
+    public boolean puedeMoverse() { 
+        return ref.puedeMoverse(); 
+    }
+
+    public int getPosX() { 
+        return coor.posX(); 
+    }
     
-    public void setPosicion(int nuevoPosX, int nuevoPosY) { coor = new RCoordenada(nuevoPosX, nuevoPosY); }
+    public int getPosY() { 
+        return coor.posY(); 
+    }
+    
+    public void setPosicion(int nuevoPosX, int nuevoPosY) { 
+        coor = new RCoordenada(nuevoPosX, nuevoPosY); 
+    }
 }

@@ -11,5 +11,7 @@ public final class CMagoAuror extends CPersonajeMago {
     }
     
 	@Override
-	public String getClase() { return "Auror";	}
+	public String getClase() { 
+        return "Auror";	
+    }
 }

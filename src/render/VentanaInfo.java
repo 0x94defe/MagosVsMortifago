@@ -34,9 +34,17 @@ public class VentanaInfo extends JFrame {
         LayoutPantalla.posicionarInfo(this);
     }
 
-    public void setActual(Entidad e)        { entidadActual = e; }
-    public void setInspeccionada(Entidad e) { entidadInspeccionada = e; }
-    public void mostrar() { SwingUtilities.invokeLater(() -> setVisible(true)); }
+    public void setActual(Entidad e) { 
+        entidadActual = e; 
+    }
+
+    public void setInspeccionada(Entidad e) { 
+        entidadInspeccionada = e; 
+    }
+
+    public void mostrar() { 
+        SwingUtilities.invokeLater(() -> setVisible(true)); 
+    }
 
     private static class PanelEntidad extends JPanel {
         private static final long serialVersionUID = 1L;
