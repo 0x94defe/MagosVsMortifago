@@ -4,7 +4,7 @@ import sim.IAfectable;
 import java.util.Set;
 
 
-public abstract class AHabilidad {
+public abstract class AHabilidad implements Hechizo {
 	private final String nombre;
 	private final String descripcion;
     private final int coste;
@@ -36,18 +36,24 @@ public abstract class AHabilidad {
     }
 
     public abstract String getDetallesEspecificos();
+    @Override
     public abstract void ejecutar(IAfectable lanzador, IAfectable objetivo);
+    @Override
     public abstract boolean esHabilidadOfensiva();
+    @Override
     public abstract boolean esHabilidadEspecial();
     
+    @Override
     public String getNombre(){ 
         return nombre; 
     }
 
+	@Override
 	public int getCosteRecurso(){ 
         return coste; 
     }
 
+	@Override
 	public int getDistanciaAtaque(){ 
         return distancia; 
     }
