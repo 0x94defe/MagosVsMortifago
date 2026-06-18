@@ -6,9 +6,12 @@ public final class CMortifagoLacayo extends CPersonajeMortifago {
     public static final int VELOCIDAD_INICIAL = 2;
 
     public CMortifagoLacayo(String nombre) {
-        super(nombre, null, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+        super(nombre, DESCRIPCION, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+    }
+    public CMortifagoLacayo(String nombre, String descr) {
+        super(nombre, descr, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
     }
     
 	@Override
-	public String getClase() { return "Lacayo";	}
+	public String getNombreClase() { return "Lacayo"; }
 }

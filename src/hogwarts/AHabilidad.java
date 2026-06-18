@@ -1,10 +1,11 @@
 package hogwarts;
 import sim.IAfectable;
+import sim.ICasteable;
 
 import java.util.Set;
 
 
-public abstract class AHabilidad {
+public abstract class AHabilidad implements ICasteable {
 	private final String nombre;
 	private final String descripcion;
     private final int coste;
@@ -23,7 +24,8 @@ public abstract class AHabilidad {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         
-        sb.append("Hechizo:      ").append(nombre).append("\n");
+        sb.append("Habilidad:    ").append(nombre).append("\n");
+        sb.append("Tipo:         ").append(getTipoHabilidad()).append("\n");
         sb.append("Faccion:      ").append(faccionesPermitidas).append("\n");
         sb.append("Descripcion:  ").append("\n\t   ");
         sb.append(descripcion.replaceAll("(.{1,21})(?:\\s+|$)", "$1\n\t   ").trim()).append("\n");
@@ -34,14 +36,23 @@ public abstract class AHabilidad {
 
         return sb.toString();
     }
-
     public abstract String getDetallesEspecificos();
-    public abstract void ejecutar(IAfectable lanzador, IAfectable objetivo);
-    public abstract boolean esHabilidadOfensiva();
-    public abstract boolean esHabilidadEspecial();
     
+    // interfaze casteable
     public String getNombre() { return nombre; }
 	public int getCosteRecurso() { return coste; }
 	public int getDistanciaAtaque() { return distancia; }
-	public Set<EFaccion> getFaccionesPermitidas() { return Set.copyOf(faccionesPermitidas); }
+    @Override
+    public abstract String getTipoHabilidad();
+    @Override
+    public abstract void ejecutar(IAfectable lanzador, IAfectable objetivo);
+    @Override
+    public abstract boolean esHabilidadOfensiva();
+    @Override 
+	public abstract boolean esHabilidadTurnable();
+    @Override
+    public abstract boolean esHabilidadEspecial();
+    
+    // getters
+    public Set<EFaccion> getFacciones() { return Set.copyOf(faccionesPermitidas); }
 }

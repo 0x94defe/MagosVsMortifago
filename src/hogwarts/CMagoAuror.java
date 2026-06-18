@@ -9,7 +9,10 @@ public final class CMagoAuror extends CPersonajeMago {
     public CMagoAuror(String nombre) {
         super(nombre, DESCRIPCION, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
     }
+    public CMagoAuror(String nombre, String descr) {
+        super(nombre, descr, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+    }
     
 	@Override
-	public String getClase() { return "Auror";	}
+	public String getNombreClase() { return "Auror"; }
 }

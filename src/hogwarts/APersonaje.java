@@ -1,4 +1,5 @@
 package hogwarts;
+import sim.ICasteable;
 import sim.IInstanciable;
 
 import java.util.Arrays;
@@ -12,14 +13,16 @@ import java.util.Map;
 public abstract class APersonaje implements Cloneable, IInstanciable {
     private final String nombre;
     private final String descripcion;
+    private final EFaccion faccion;
     private final int puntosSalud;
 	private final int puntosMana;
     private final int movimiento;
     private final Map<FLibroDeHechizos, CHechizo> hechizosDisponibles;
 
-    protected APersonaje(String nombre, String descr, int puntosSalud, int puntosMana, int movimiento, Map<FLibroDeHechizos, CHechizo> hechizos) {
+    protected APersonaje(String nombre, String descr, EFaccion faccion, int puntosSalud, int puntosMana, int movimiento, Map<FLibroDeHechizos, CHechizo> hechizos) {
         this.nombre = nombre;
         this.descripcion = descr;
+        this.faccion = faccion;
         this.puntosSalud = puntosSalud;
         this.puntosMana = puntosMana;
         this.movimiento = movimiento;
@@ -48,8 +51,8 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
         StringBuilder sb = new StringBuilder();
         
         sb.append("Nombre:    ").append(nombre).append("\n");
-        sb.append("Faccion:     ").append(this.getFaccion()).append("\n");
-        sb.append("Clase:     ").append(this.getClase()).append("\n");
+        sb.append("Faccion:   ").append(faccion).append("\n");
+        sb.append("Clase:     ").append(this.getNombreClase()).append("\n");
         sb.append("Descripcion: ").append("\n\t   ");
         sb.append(descripcion.replaceAll("(.{1,21})(?:\\s+|$)", "$1\n\t   ").trim()).append("\n");
         sb.append("-- Estadisticas --").append("\n");
@@ -62,25 +65,16 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
     }
     
     // interfaze instnciable
-    @Override
 	public String getNombre()      { return nombre; }
-    @Override
 	public String getDescripcion() { return descripcion; }
-    @Override
-    public abstract EFaccion getFaccion();
-    @Override
-    public abstract String getClase();
-    @Override
+    public String getNombreFaccion() { return faccion.toString(); }
+    @Override public abstract String getNombreClase();
 	public String getDatosEspecificos() { return datosDePersonaje(); }
-    @Override
 	public int getPuntosSalud()    { return puntosSalud; }
-    @Override
 	public int getPuntosRecurso()  { return puntosMana; }
-    @Override
-	public int getVelocidad()      { return movimiento; }
-    @Override
-    public Map<Integer, AHabilidad> getHabilidades() {
-        Map<Integer, AHabilidad> mapaFormateado = new HashMap<>();
+	public int getMovimiento()      { return movimiento; }
+    public Map<Integer, ICasteable> getHabilidades() {
+        Map<Integer, ICasteable> mapaFormateado = new HashMap<>();
         
         for (Map.Entry<FLibroDeHechizos, CHechizo> entrada : hechizosDisponibles.entrySet()) {
             int idNumerico = entrada.getKey().name().toUpperCase().hashCode();
@@ -89,14 +83,12 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
         
         return mapaFormateado;
     }
-    @Override
     public boolean puedeActuar() { return true; }
-    @Override
     public boolean puedeMoverse() { return true; }
       
     // Getters
     public CHechizo[] getHechizosDisponibles() { return hechizosDisponibles.values().toArray(new CHechizo[0]); }
-
+    public EFaccion getFaccion() { return faccion; }
     
     //helper para los hijos, necesitar ser static para llamarlo en super()
     protected static Map<FLibroDeHechizos, CHechizo> construirHechizos(EFaccion faccion, FLibroDeHechizos[] a, FLibroDeHechizos[] b) {

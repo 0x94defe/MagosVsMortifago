@@ -1,27 +1,30 @@
 package hogwarts;
 
 public enum ETipoHabilidad {
-    DESTRUCTIVO("ataque", true, false, false),
     CURATIVO("curacion", false, false, false),
-    ROBAR_MANA("roboMana", true, false, true),
-    ENCANTAMIENTO("turnos", true, true, true),
-	BUFF("turnos", false, false, true),
-	DEBUFF("turnos", true, false, true);
+    DESTRUCTIVO("ataque", true, false, false),
+    UTILIDAD("especial:", false, false, true),     //Teleport, Disipar
+    ENCANTAR("especial:", true, false, true),
+    
+    REGENERATIVO("turnos", false, true, false),
+    DEGENERATIVO("turnos", true, true, false),
+    BUFF("turnos", false, true, true),
+    DEBUFF("turnos", true, true, true);
  
     private final String stat;
     private final boolean ofensivo;
-    private final boolean curativo;
+    private final boolean turnado;
     private final boolean especial;
 
-    ETipoHabilidad(String stat, boolean ofensivo, boolean curativo, boolean especial) {
+    ETipoHabilidad(String stat, boolean ofensivo, boolean turnado, boolean especial) {
         this.stat = stat;
         this.ofensivo = ofensivo;
-        this.curativo = curativo;
+        this.turnado = turnado;
         this.especial = especial;
     }
 
     public String getStat() { return this.stat; }
     public boolean esOfensivo() { return this.ofensivo; }
-    public boolean esCurativo() { return this.curativo; }
+    public boolean esTurnado() { return this.turnado; }
     public boolean esEspecial() { return this.especial; }
 }

@@ -52,14 +52,14 @@ public abstract class EscenariosPrefab {
     }
 
     public static Escenario duelo() {
-        PersonajeManager pm = new PersonajeManager();
         BandoManager bm = new BandoManager()
         	    .registrarBando("GRUPO_A")
         	    .registrarBando("GRUPO_B")
         	    .definirRelacion("GRUPO_A", "GRUPO_B", BandoManager.ENEMIGO);
         Escenario e = new Escenario("Duelo a Muerte", bm.buildBando());
         
-        e.registrarMago(pm.crearMagoSiNoExiste(FCatalogoDePersonajes.HARRY), bm.getId("GRUPO_A"), 0, 0);
+        e.registrarMortifago(new CMortifagoComandante("Malfoy 2"), bm.getId("GRUPO_A"), 0, 0);
+        e.registrarMago(new CMagoEstudiante("Alejo"), bm.getId("GRUPO_A"), 1, 0);
         e.registrarMortifago(new CMortifagoComandante("Malfoy"), bm.getId("GRUPO_B"), 0, 2);
         
         return e;

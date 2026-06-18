@@ -15,16 +15,14 @@ public class CPersonajeMago extends APersonaje {
         super(
         	nombre,
         	descr == null? DESCRIPCION: descr,
+        	FACCION,
         	puntosMana,
         	puntosSalud,
         	velocidad,
         	construirHechizos(FACCION, HECHIZOS_RACIALES, hechizosParticulares)
         );
 	}
-
-
-    @Override
-    public final EFaccion getFaccion() { return FACCION; } //al ponerle final ninguna subclase se manda cagadas
+    
 	@Override
-	public String getClase() { return "Mago Raso"; }
+	public String getNombreClase() { return "Mago Raso"; }
 }

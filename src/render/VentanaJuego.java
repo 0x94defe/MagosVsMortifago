@@ -1,9 +1,12 @@
 package render;
-import hogwarts.AHabilidad;
 import sim.Entidad;
+import sim.ICasteable;
 import sim.SimuladorTurnos;
 
 import javax.swing.*;
+
+
+
 import java.awt.*;
 import java.util.List;
 
@@ -157,7 +160,7 @@ public class VentanaJuego extends JFrame {
     private void mostrarHechizos(Entidad objetivo) {
         limpiarAcciones();
 
-        List<AHabilidad> habilidades = sim.getHabilidadesDisponiblesParaObjetivo(objetivo);
+        List<ICasteable> habilidades = sim.getHabilidadesDisponiblesParaObjetivo(objetivo);
 
         if (habilidades.isEmpty()) {
             JLabel lbl = new JLabel("Sin Habilidades para ese objetivo");
@@ -165,7 +168,7 @@ public class VentanaJuego extends JFrame {
             lbl.setFont(new Font("Arial", Font.ITALIC, 13));
             panelAcciones.add(lbl);
         } else {
-            for (AHabilidad h : habilidades) {
+            for (ICasteable h : habilidades) {
                 boolean enAlcance = sim.estaEnRango(h, objetivo);
                 String label = h.getNombre() + " (" + h.getCosteRecurso() + "MP)"
                              + (enAlcance ? "" : "  ✗");
@@ -228,7 +231,6 @@ public class VentanaJuego extends JFrame {
     private void siguienteEntidad() { 
         sim.procesarTurno(); 
         actualizarEntidadActual();
-        verificarVictoria();
     }
     
     private void saltarTurno() {
@@ -237,8 +239,10 @@ public class VentanaJuego extends JFrame {
         verificarVictoria();
     }
 
-    private void terminarRonda() { 
+    private void terminarRonda() {
+        if (juegoTerminado) return;
         sim.terminarRonda();
-        actualizarEntidadActual(); 
+        verificarVictoria();
+        if (!juegoTerminado) actualizarEntidadActual();
     }
 }

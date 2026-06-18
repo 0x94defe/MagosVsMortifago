@@ -28,7 +28,7 @@ public class GrillaRender extends JPanel {
 
     public GrillaRender(Grilla grilla) {
         this.grilla = grilla;
-        setPreferredSize(new Dimension(grilla.ancho * TAM_CELDA, grilla.alto * TAM_CELDA));
+        setPreferredSize(new Dimension(grilla.getAncho() * TAM_CELDA, grilla.getAlto() * TAM_CELDA));
         setBackground(Color.BLACK);
 
         addMouseListener(new MouseAdapter() {
@@ -78,8 +78,8 @@ public class GrillaRender extends JPanel {
     }
 
     private void dibujarFondos(Graphics g) {
-        for (int x = 0; x < grilla.ancho; x++) {
-            for (int y = 0; y < grilla.alto; y++) {
+        for (int x = 0; x < grilla.getAncho(); x++) {
+            for (int y = 0; y < grilla.getAlto(); y++) {
                 Entidad e = grilla.getEntidad(x, y);
                 int px = x * TAM_CELDA;
                 int py = y * TAM_CELDA;
@@ -102,18 +102,18 @@ public class GrillaRender extends JPanel {
 
     private void dibujarGrilla(Graphics g) {
         g.setColor(new Color(50, 50, 50));
-        for (int x = 0; x <= grilla.ancho; x++)
-            g.drawLine(x * TAM_CELDA, 0, x * TAM_CELDA, grilla.alto * TAM_CELDA);
-        for (int y = 0; y <= grilla.alto; y++)
-            g.drawLine(0, y * TAM_CELDA, grilla.ancho * TAM_CELDA, y * TAM_CELDA);
+        for (int x = 0; x <= grilla.getAncho(); x++)
+            g.drawLine(x * TAM_CELDA, 0, x * TAM_CELDA, grilla.getAlto() * TAM_CELDA);
+        for (int y = 0; y <= grilla.getAlto(); y++)
+            g.drawLine(0, y * TAM_CELDA, grilla.getAncho() * TAM_CELDA, y * TAM_CELDA);
     }
 
     private void dibujarEntidades(Graphics g) {
         int margen = 4;
         int diam = TAM_CELDA - margen * 2;
 
-        for (int x = 0; x < grilla.ancho; x++) {
-            for (int y = 0; y < grilla.alto; y++) {
+        for (int x = 0; x < grilla.getAncho(); x++) {
+            for (int y = 0; y < grilla.getAlto(); y++) {
                 Entidad e = grilla.getEntidad(x, y);
                 if (e == null) continue;
 

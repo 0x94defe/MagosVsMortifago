@@ -6,9 +6,12 @@ public final class CMagoEstudiante extends CPersonajeMago {
 	public static final int VELOCIDAD_INICIAL = 2;
     
     public CMagoEstudiante(String nombre) {
-        super(nombre, null, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+        super(nombre, DESCRIPCION, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+    }
+    public CMagoEstudiante(String nombre, String descr) {
+        super(nombre, descr, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
     }
     
 	@Override
-	public String getClase() { return "Estudiante";	}
+	public String getNombreClase() { return "Estudiante"; }
 }

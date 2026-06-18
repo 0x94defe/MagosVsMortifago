@@ -2,8 +2,8 @@ package sim;
 
 
 public class Grilla {
-    public final int ancho;
-    public final int alto;
+	private final int ancho;
+    private final int alto;
     private final Entidad[][] celdas;
 
     public Grilla(int ancho, int alto) {
@@ -54,7 +54,8 @@ public class Grilla {
 
     public Entidad getEntidad(int x, int y) { return celdas[x][y]; }
     public boolean estaLibre(int x, int y)  { return celdas[x][y] == null; }
-    
+    public int getAlto() { return alto; }
+    public int getAncho() { return ancho; }
     
     public boolean estaFueraDeGrilla(int x, int y) {
     	return x < 0 || x >= ancho || y < 0 || y >= alto;

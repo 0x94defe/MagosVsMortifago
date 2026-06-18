@@ -1,14 +1,15 @@
 package hogwarts;
 import sim.IAfectable;
+import sim.ITurnable;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
 
 
 public class CHechizo extends AHabilidad implements Cloneable {
-    public final ETipoHabilidad tipoHechizo;
+    private final ETipoHabilidad tipoHechizo;
     private int valorEspecial;
-    private final BiConsumer<IAfectable, IAfectable> estrategia;
+    private BiConsumer<IAfectable, IAfectable> estrategia;
     
     
     public CHechizo(
@@ -25,9 +26,8 @@ public class CHechizo extends AHabilidad implements Cloneable {
         try { return (CHechizo) super.clone(); } 
         catch (CloneNotSupportedException e) { throw new AssertionError(); }
     }
-    
-    
-    @Override
+    protected String getMasDetallesEspecificos() {	return ""; }
+
     public String getDetallesEspecificos() {
         StringBuilder sb = new StringBuilder();
 
@@ -37,21 +37,13 @@ public class CHechizo extends AHabilidad implements Cloneable {
         
         return sb.toString();
     }
-    @Override
-    public void ejecutar(IAfectable lanzador, IAfectable objetivo) {
-    	estrategia.accept(lanzador, objetivo);
-    }
-    
-    protected String getMasDetallesEspecificos() {
-		return "";
-	}
-    
-    public int getValorEspecial() {
-    	return valorEspecial;
-    }
-
-	@Override
+    public void ejecutar(IAfectable lanzador, IAfectable objetivo) { estrategia.accept(lanzador, objetivo); }
+    public String getTipoHabilidad() { return "Hechizo"; }
 	public boolean esHabilidadOfensiva() { return tipoHechizo.esOfensivo(); }
-	@Override
+	public boolean esHabilidadTurnable() { return tipoHechizo.esTurnado(); }
 	public boolean esHabilidadEspecial() { return tipoHechizo.esEspecial(); }
+    public int getValorEspecifico() { return valorEspecial; }
+    public void setValorEspecifico(int nuevoValor) { valorEspecial = nuevoValor; }
+    public void setNuevoComportamiento(BiConsumer<IAfectable, IAfectable> nuevaEstrategia) { estrategia = nuevaEstrategia; }
+	public ITurnable getComportamiento() { return null;	}
 }

@@ -2,19 +2,17 @@ package sim;
 
 import java.util.Map;
 
-import hogwarts.AHabilidad;
-import hogwarts.EFaccion;
-
 public interface IInstanciable {
 	public String getNombre();
 	public String getDescripcion();
-	public EFaccion getFaccion();
-	public String getClase();
+	public String getNombreFaccion();
+	public String getNombreClase();
 	public String getDatosEspecificos();
 	public int getPuntosSalud();
 	public int getPuntosRecurso();
-	public int getVelocidad();
-	public Map<Integer, AHabilidad> getHabilidades();
+	public int getMovimiento();
+	
+	public Map<Integer, ICasteable> getHabilidades();
     public boolean puedeActuar();
     public boolean puedeMoverse();
 }
