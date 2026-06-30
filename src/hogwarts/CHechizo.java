@@ -1,25 +1,19 @@
 package hogwarts;
-import sim.IAfectable;
+import sim.IEstrategiaHabilidad;
 import sim.ITurnable;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 
 public class CHechizo extends AHabilidad implements Cloneable {
-    private final ETipoHabilidad tipoHechizo;
-    private int valorEspecial;
-    private BiConsumer<IAfectable, IAfectable> estrategia;
+    private final ETipoHabilidad tipoHechizo;  
     
-    
-    public CHechizo(
-    		String nombre, String descr, int coste, int distancia, Set<EFaccion> faccionesPermitidas,
-    		ETipoHabilidad tipoHechizo, int valorEspecial, BiConsumer<IAfectable, IAfectable> estrategia
-    ) {
-        super(nombre, descr, coste, distancia, faccionesPermitidas);
+    public CHechizo(String nombre, String descr, ENivel nivelRequerido, EAfinidad afinidad, int coste, int distancia,
+    		        Set<EFaccion> faccionesPermitidas, int valorEspecial, IEstrategiaHabilidad estrategia,
+    		        ETipoHabilidad tipoHechizo)
+    {
+        super(nombre, descr, nivelRequerido, afinidad, coste, distancia, faccionesPermitidas, valorEspecial, estrategia);
         this.tipoHechizo = tipoHechizo;
-        this.valorEspecial = valorEspecial;
-        this.estrategia = estrategia;
     }
 
     public CHechizo clonar() {
@@ -31,19 +25,19 @@ public class CHechizo extends AHabilidad implements Cloneable {
     public String getDetallesEspecificos() {
         StringBuilder sb = new StringBuilder();
 
+        sb.append(" " + tipoHechizo.getStat() + "\n");
         sb.append("Tipo Hechizo: ").append(tipoHechizo).append("\n");
         sb.append(getMasDetallesEspecificos());
-        sb.append("Valor:       ").append(valorEspecial).append(" " + tipoHechizo.getStat() + "\n");
         
         return sb.toString();
     }
-    public void ejecutar(IAfectable lanzador, IAfectable objetivo) { estrategia.accept(lanzador, objetivo); }
-    public String getTipoHabilidad() { return "Hechizo"; }
+
+
+    //interfaz
+    public String getNombreHabilidad() { return "Hechizo"; }
+    public ETipoHabilidad getTipoHabilidad() { return tipoHechizo; }
+	public ITurnable getComportamiento() { return null;	}
 	public boolean esHabilidadOfensiva() { return tipoHechizo.esOfensivo(); }
 	public boolean esHabilidadTurnable() { return tipoHechizo.esTurnado(); }
 	public boolean esHabilidadEspecial() { return tipoHechizo.esEspecial(); }
-    public int getValorEspecifico() { return valorEspecial; }
-    public void setValorEspecifico(int nuevoValor) { valorEspecial = nuevoValor; }
-    public void setNuevoComportamiento(BiConsumer<IAfectable, IAfectable> nuevaEstrategia) { estrategia = nuevaEstrategia; }
-	public ITurnable getComportamiento() { return null;	}
 }

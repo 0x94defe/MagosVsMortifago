@@ -31,5 +31,6 @@ public class LayoutPantalla {
         int margen = getAncho() / 4;
         w.setSize(getAncho() - margen * 2, getAlto());
         w.setLocation(getX() + margen, getY());
+        w.setMinimumSize(new Dimension(600, 500));
     }
 }

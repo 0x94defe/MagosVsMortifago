@@ -1,64 +1,84 @@
 package sim;
-
-import hogwarts.CPersonajeMago;
-import hogwarts.CPersonajeMortifago;
-import hogwarts.APersonaje;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Escenario {
-	private final String nombre;
-	private final Bando bandos;
+
+public class Escenario implements IEscenarioConsulta {
+	private record RCoordenada(int posX, int posY) {}
+	private record RInstanciableConBando(IInstanciable instanciable, int idBando) {}
+	
+	private final int ancho;
+	private final int alto;
+	private final String nombreDelMapa;
+	private final BandoManager politicas;
 	private final Map<RCoordenada, RInstanciableConBando> spawnPoints;
-    private final List<CPersonajeMago> magos;
-    private final List<CPersonajeMortifago> mortifagos;
+    private final List<IInstanciable> personajes;
+
     //agregar objetos
     //agregar critters
 
-    public Escenario(String nombre, Bando bandos) {
-    	this.nombre = nombre;
-    	this.bandos = bandos;
+    public Escenario(int ancho, int alto, String nombreDelMapa, BandoManager bandos) {
+        if (ancho <= 0 || ancho >= 50 || alto <= 0 || alto >= 50)
+            throw new IllegalArgumentException("Valores de grilla no permitidos");
+    	
+        this.ancho = ancho;
+        this.alto = alto;
+    	this.nombreDelMapa = nombreDelMapa;
+    	this.politicas = bandos;
         this.spawnPoints = new HashMap<>();
-        this.magos = new ArrayList<>();
-        this.mortifagos = new ArrayList<>();
+        this.personajes = new ArrayList<>();
     }
 
+    //constructores
+    public Turnero crearSimulacion() {
+    	Grilla grillaNueva = new Grilla(ancho, alto);
+        Map<Integer, List<Entidad>> bandoConEntidades = new HashMap<>();
 
-    public boolean registrarMago(CPersonajeMago pj, int idBando, int x, int y) {
-        if (agregarAlMapa(pj, idBando, x, y)) {
-            magos.add(pj);
-            return true;
+    	for (Map.Entry<RCoordenada, RInstanciableConBando> e : spawnPoints.entrySet()) {
+            RCoordenada coor = e.getKey();
+            RInstanciableConBando spawn = e.getValue();
+
+            Entidad ent = new Entidad(spawn.instanciable(), politicas.getBandoToken(spawn.idBando()));
+            
+            boolean pudoAgregar = grillaNueva.agregarEntidad(ent, coor.posX(), coor.posY());
+            if (!pudoAgregar) throw new IllegalStateException(
+            		"No hay espacio para spawnear a " + ent.getNombre() + ". Mismatch en spawn point (" + coor.posX() + "," + coor.posY() + ")"
+            );
+
+            if (ent.puedeActuar()) {
+            	List<Entidad> acumParcial = bandoConEntidades.getOrDefault(spawn.idBando(), null);
+            	if (acumParcial == null) acumParcial = new ArrayList<>();
+            	acumParcial.add(ent);
+            	bandoConEntidades.put(spawn.idBando(), acumParcial);
+            }
         }
-        return false;
+        
+        
+        return new Turnero(nombreDelMapa, grillaNueva, politicas, bandoConEntidades);
     }
-    public boolean registrarMortifago(CPersonajeMortifago pj, int idBando, int x, int y) {
-        if (agregarAlMapa(pj, idBando, x, y)) {
-            mortifagos.add(pj);
-            return true;
-        }
-        return false;
-    }
+    
+    //helpers
     private boolean agregarAlMapa(IInstanciable i, int idBando, int x, int y) {
         RCoordenada coor = new RCoordenada(x, y);
         return spawnPoints.putIfAbsent(coor, new RInstanciableConBando(i, idBando)) == null;
     }
 
-    public String getNombre() { return nombre; }
-    public Bando getBandosDisponibles() { return bandos; }
-    public Map<RCoordenada, RInstanciableConBando> getSpawnPoints() { return this.spawnPoints; }
-    public List<CPersonajeMortifago> getMortifagos() { return this.mortifagos; }
-    public List<CPersonajeMago> getMagos() { return this.magos; }
-    public List<APersonaje> getTodosLosPersonajes() {
-        List<APersonaje> todos = new ArrayList<>();
-        
-        todos.addAll(this.magos);
-        todos.addAll(this.mortifagos);
-        
-        return todos;
+    //mutadores
+    public boolean registrarPj(IInstanciable pj, int idBando, int x, int y) {
+        if (agregarAlMapa(pj, idBando, x, y)) {
+            personajes.add(pj);
+            return true;
+        }
+        return false;
     }
+
+    
+   
+    //getters
+    public Map<RCoordenada, RInstanciableConBando> getSpawnPoints() { return spawnPoints; }
+    public List<IInstanciable> getTodosLosPersonajes() { return personajes; }  
     public List<IInstanciable> getTodasLosInstanciables() {
         List<IInstanciable> listaDesenvuelta = new ArrayList<>();
 
@@ -68,4 +88,17 @@ public class Escenario {
         
         return listaDesenvuelta;
     }
+
+    // interfaz
+    public String getNombre() { return nombreDelMapa; }
+	public String getDescripcionDeTodosLosPersonajes() {
+		StringBuilder sbPersonajes = new StringBuilder();
+		
+		for (IInstanciable p : personajes) {
+			sbPersonajes.append("===================================\n");
+			sbPersonajes.append(p.toString()).append("\n");
+		}
+		
+		return sbPersonajes.toString();
+	}
 }

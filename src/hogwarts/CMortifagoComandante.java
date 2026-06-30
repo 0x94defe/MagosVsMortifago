@@ -6,11 +6,9 @@ public final class CMortifagoComandante extends CPersonajeMortifago {
     public static final int VELOCIDAD_INICIAL = 2;
 
     public CMortifagoComandante(String nombre) {
-        super(nombre, DESCRIPCION, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
+        super(nombre, DESCRIPCION, NIVEL, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
     }
-    public CMortifagoComandante(String nombre, String descr) {
-        super(nombre, descr, SALUD_INICIAL, MANA_INICIAL, VELOCIDAD_INICIAL);
-    }
+
     
 	@Override
 	public String getNombreClase() { return "Comandante"; }

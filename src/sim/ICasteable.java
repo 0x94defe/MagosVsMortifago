@@ -1,20 +1,21 @@
 package sim;
 
-import java.util.function.BiConsumer;
 
 public interface ICasteable {  
-    public String getNombre();
-    public String getTipoHabilidad();
-	public int getCosteRecurso();
-	public int getDistanciaAtaque();
-	public int getValorEspecifico();
-	public ITurnable getComportamiento();
+    String getNombre();
+    String getNombreHabilidad();
+	int getCosteRecurso();
+	int getDistanciaAtaque();
+	int getValorEspecifico();
 	
-	public void setValorEspecifico(int nuevoValor);
-	public void setNuevoComportamiento(BiConsumer<IAfectable, IAfectable> nuevaEstrategia);
+	ITurnable getComportamiento();
+    void ejecutar(IAfectable lanzador, IAfectable objetivo);
 	
-    public void ejecutar(IAfectable lanzador, IAfectable objetivo);
-    public boolean esHabilidadOfensiva();
-	public boolean esHabilidadTurnable();
-    public boolean esHabilidadEspecial();
+	void setValorEspecifico(int nuevoValor);
+	void setBonificacion(double proporcion);
+	void setNuevoComportamiento(IEstrategiaHabilidad nuevaEstrategia);
+	
+    boolean esHabilidadOfensiva();
+	boolean esHabilidadTurnable();
+    boolean esHabilidadEspecial();
 }

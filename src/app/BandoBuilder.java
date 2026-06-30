@@ -1,25 +1,26 @@
 package app;
-import sim.Bando;
-import sim.ETipoRelacion;
+import sim.BandoManager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import hogwarts.EFaccion;
 
-public class BandoManager {
+
+public class BandoBuilder {
 	private record Relacion(int bandoA, int bandoB, int tipo) {}
 	
-	public static final int AMIGO = ETipoRelacion.AMIGO.getValor();
-    public static final int NEUTRAL = ETipoRelacion.NEUTRAL.getValor();
-    public static final int ENEMIGO = ETipoRelacion.ENEMIGO.getValor();
+	public static final int AMIGO = BandoManager.AMIGO;
+    public static final int NEUTRAL = BandoManager.NEUTRAL;
+    public static final int ENEMIGO = BandoManager.ENEMIGO;
     private int id_autogen = 0;
     private final Map<String, Integer> bandosRegistrados = new LinkedHashMap<>();
     private List<Relacion> relaciones = new ArrayList<>();
 
 
-    public BandoManager registrarBando(String nombre) {
+    public BandoBuilder registrarBando(String nombre) {
         String nombreNormalizado = nombre.toUpperCase();
         
         if (bandosRegistrados.containsKey(nombreNormalizado) == false) {
@@ -29,7 +30,11 @@ public class BandoManager {
         
         return this;
     }
-    public BandoManager definirRelacion(String bandoA, String bandoB, int tipoRelacion) {
+    public BandoBuilder registrarBando(EFaccion faccion) {
+        return this.registrarBando(faccion.name());
+    }
+    
+    public BandoBuilder definirRelacion(String bandoA, String bandoB, int tipoRelacion) {
     	Integer idBandoA = bandosRegistrados.get(bandoA.toUpperCase());
     	Integer idBandoB = bandosRegistrados.get(bandoB.toUpperCase());
     	
@@ -40,7 +45,11 @@ public class BandoManager {
     	
         return this;
     }
-    public Bando buildBando() {
+    public BandoBuilder definirRelacion(EFaccion bandoA, EFaccion bandoB, int tipoRelacion) {
+        return this.definirRelacion(bandoA.name(), bandoB.name(), tipoRelacion);
+    }
+    
+    public BandoManager buildBando() {
         int cantidad = bandosRegistrados.size();
         int[][] matriz = new int[cantidad][cantidad];
 
@@ -59,7 +68,7 @@ public class BandoManager {
         for (Map.Entry<String, Integer> entry : bandosRegistrados.entrySet()) {
             nombresOrdenados[entry.getValue()] = entry.getKey();
         }
-        return new Bando(nombresOrdenados, matriz);
+        return new BandoManager(nombresOrdenados, matriz);
     }
 
 
@@ -69,5 +78,8 @@ public class BandoManager {
             throw new IllegalArgumentException("El bando '" + nombreBando + "' no existe en esta partida.");
         }
         return id;
+    }
+    public int getId(EFaccion faccion) {
+        return this.getId(faccion.name());
     }
 }

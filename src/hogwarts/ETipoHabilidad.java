@@ -3,8 +3,8 @@ package hogwarts;
 public enum ETipoHabilidad {
     CURATIVO("curacion", false, false, false),
     DESTRUCTIVO("ataque", true, false, false),
-    UTILIDAD("especial:", false, false, true),     //Teleport, Disipar
-    ENCANTAR("especial:", true, false, true),
+    UTILIDAD("especial", false, false, true),     //Teleport, Disipar
+    ENCANTAR("especial", true, false, true),
     
     REGENERATIVO("turnos", false, true, false),
     DEGENERATIVO("turnos", true, true, false),

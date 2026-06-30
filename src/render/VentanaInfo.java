@@ -1,5 +1,5 @@
 package render;
-import sim.Entidad;
+import sim.IObservable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,8 @@ public class VentanaInfo extends JFrame {
 
     private final PanelEntidad panelActual;
     private final PanelEntidad panelInspeccionada;
-    private Entidad entidadActual;
-    private Entidad entidadInspeccionada;
+    private IObservable entidadActual;
+    private IObservable entidadInspeccionada;
 
     public VentanaInfo() {
         setTitle("Información");
@@ -34,13 +34,14 @@ public class VentanaInfo extends JFrame {
         LayoutPantalla.posicionarInfo(this);
     }
 
-    public void setActual(Entidad e)        { entidadActual = e; }
-    public void setInspeccionada(Entidad e) { entidadInspeccionada = e; }
+    public void setActual(IObservable e)        { entidadActual = e; }
+    public void setInspeccionada(IObservable e) { entidadInspeccionada = e; }
     public void mostrar() { SwingUtilities.invokeLater(() -> setVisible(true)); }
 
     private static class PanelEntidad extends JPanel {
         private static final long serialVersionUID = 1L;
         private final JTextArea area;
+        private final JScrollPane scrollPane;
 
         PanelEntidad(String titulo, Color colorTitulo) {
             setLayout(new BorderLayout(4, 4));
@@ -51,17 +52,25 @@ public class VentanaInfo extends JFrame {
             TemasUI.pintarTituloPantalla(lbl);
             add(lbl, BorderLayout.NORTH);
 
-
             area = new JTextArea("—");
             TemasUI.pintarAreaTexto(area);
 
-            JScrollPane scrollPane = new JScrollPane(area);
+            scrollPane = new JScrollPane(area);
             TemasUI.aplicarEstiloOscuro(scrollPane);
             add(scrollPane, BorderLayout.CENTER);
         }
 
-        void setEntidad(Entidad e) {
-            area.setText(e == null? "—" : e.toString());
+        void setEntidad(IObservable e) {
+            String nuevoTexto = (e == null) ? " - Sin Objetivo - " : e.toString();
+
+            if (nuevoTexto.equals(area.getText())) return;
+
+            int scrollVertical = scrollPane.getVerticalScrollBar().getValue();
+            area.setText(nuevoTexto);
+
+            SwingUtilities.invokeLater(() -> {
+                scrollPane.getVerticalScrollBar().setValue(scrollVertical);
+            });
         }
     }
 }

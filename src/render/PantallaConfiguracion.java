@@ -1,21 +1,16 @@
 package render;
-import app.EscenariosPrefab;
-import sim.Escenario;
+import app.FEscenariosPrefab;
+import sim.IEscenarioConsulta;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 
 
 public class PantallaConfiguracion extends JPanel {
     private static final long serialVersionUID = 1L;
-    private VentanaMenu ventana; // Guardamos la referencia
 
     public PantallaConfiguracion(VentanaMenu ventana) {
-        this.ventana = ventana;
-        inicializarUI();
-    }
-
-    private void inicializarUI() {
         setLayout(new BorderLayout(10, 10));
         TemasUI.configurarPanelPantalla(this);
 
@@ -27,25 +22,22 @@ public class PantallaConfiguracion extends JPanel {
         panelPrefabs.setBackground(new Color(20, 20, 20));
         panelPrefabs.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        Escenario prefabGuerra = EscenariosPrefab.guerraCompleta();
-        Escenario prefabDuelo  = EscenariosPrefab.duelo();
+        
+        List<IEscenarioConsulta> escenarios = FEscenariosPrefab.obtenerEscenariosDisponibles();
+        for (IEscenarioConsulta prefab : escenarios) {
+            JButton btnEscenario = new JButton(prefab.getNombre());
+            TemasUI.estilizarBoton(btnEscenario);
+            
+            btnEscenario.addActionListener(e -> ventana.asignarEscenarioYContinuar(prefab));
+            
+            panelPrefabs.add(btnEscenario);
+        }
 
-        JButton btnGuerra = new JButton(prefabGuerra.getNombre());
-        JButton btnDuelo  = new JButton(prefabDuelo.getNombre());
-        TemasUI.estilizarBoton(btnGuerra);
-        TemasUI.estilizarBoton(btnDuelo);
-
-        // Al hacer clic, llamamos a un único método limpio en VentanaMenu
-        btnGuerra.addActionListener(e -> ventana.asignarEscenarioYContinuar(EscenariosPrefab.guerraCompleta()));
-        btnDuelo.addActionListener(e -> ventana.asignarEscenarioYContinuar(EscenariosPrefab.duelo()));
-
-        panelPrefabs.add(btnGuerra);
-        panelPrefabs.add(btnDuelo);
         add(panelPrefabs, BorderLayout.CENTER);
 
         JButton btnVolver = new JButton("Volver al Menú");
         TemasUI.estilizarBoton(btnVolver);
-        btnVolver.addActionListener(e -> ventana.cancelarConfiguracion());
+        btnVolver.addActionListener(e -> ventana.cambiarPantalla(EPantalla.MENU));
 
         JPanel panelBoton = new JPanel();
         TemasUI.pintarPanelBotonInferior(panelBoton);

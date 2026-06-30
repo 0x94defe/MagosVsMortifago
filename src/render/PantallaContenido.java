@@ -28,7 +28,7 @@ public class PantallaContenido extends JPanel {
 
         JButton btnVolver = new JButton("Volver al Menú");
         TemasUI.estilizarBoton(btnVolver);
-        btnVolver.addActionListener(e -> ventana.cambiarPantalla("MENU"));
+        btnVolver.addActionListener(e -> ventana.cambiarPantalla(EPantalla.MENU));
 
         JPanel panelBoton = new JPanel();
         TemasUI.pintarPanelBotonInferior(panelBoton);

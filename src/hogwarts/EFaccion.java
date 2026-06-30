@@ -1,7 +1,5 @@
 package hogwarts;
 
 public enum EFaccion {
-    MAGO,
-    MORTIFAGO,
-    NEUTRAL;
+    MAGO, MORTIFAGO, MUGGLE;
 }

@@ -6,27 +6,37 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import app.FLibroDeHechizos;
+
 import java.util.Map;
 
 
 public abstract class APersonaje implements Cloneable, IInstanciable {
     private final String nombre;
     private final String descripcion;
+    private final ENivel nivelInicial;
+    private final EAfinidad afinidad;
     private final EFaccion faccion;
     private final int puntosSalud;
 	private final int puntosMana;
     private final int movimiento;
     private final Map<FLibroDeHechizos, CHechizo> hechizosDisponibles;
 
-    protected APersonaje(String nombre, String descr, EFaccion faccion, int puntosSalud, int puntosMana, int movimiento, Map<FLibroDeHechizos, CHechizo> hechizos) {
+    protected APersonaje(String nombre, String descr, ENivel nivelInicial, EAfinidad afinidad, EFaccion faccion, int puntosSalud, int puntosMana, int movimiento, Set<FLibroDeHechizos> hechizos) {
         this.nombre = nombre;
         this.descripcion = descr;
+        this.nivelInicial = nivelInicial;
+        this.afinidad = afinidad;
         this.faccion = faccion;
         this.puntosSalud = puntosSalud;
         this.puntosMana = puntosMana;
         this.movimiento = movimiento;
-        this.hechizosDisponibles = hechizos;
+        
+        this.hechizosDisponibles = new HashMap<>();
+        for (FLibroDeHechizos h : hechizos) {
+        	aprenderHechizo(h);
+        }
     }
 
     public APersonaje clonar() {
@@ -34,14 +44,24 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
         catch (CloneNotSupportedException e) { throw new AssertionError(); }
     }
     
+
     
     private String datosDePersonaje() {
     	StringBuilder sb = new StringBuilder();
     	
-        sb.append("Hechizos:  ").append(
-            	Arrays.stream(this.getHechizosDisponibles())
-            	      .map(h -> h.getNombre().toUpperCase().replace(" ", "_"))
-            	      .collect(Collectors.joining(",\n\t   ")));
+        sb.append("Afinidad:  ").append(afinidad).append("\n");
+        sb.append("Nivel:     ").append(nivelInicial).append("\n");
+    	sb.append("Hechizos:  ");
+
+        boolean primero = true;
+        for (AHabilidad h : hechizosDisponibles.values()) {
+            if (!primero) sb.append(",\n\t   ");            
+
+            String nombreFormateado = h.getNombre().toUpperCase().replace(" ", "_");
+            sb.append(nombreFormateado);
+            
+            primero = false;
+        }
         
     	return sb.toString();
     }
@@ -51,6 +71,7 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
         StringBuilder sb = new StringBuilder();
         
         sb.append("Nombre:    ").append(nombre).append("\n");
+        sb.append("Nivel:     ").append(nivelInicial).append("\n");
         sb.append("Faccion:   ").append(faccion).append("\n");
         sb.append("Clase:     ").append(this.getNombreClase()).append("\n");
         sb.append("Descripcion: ").append("\n\t   ");
@@ -87,26 +108,37 @@ public abstract class APersonaje implements Cloneable, IInstanciable {
     public boolean puedeMoverse() { return true; }
       
     // Getters
-    public CHechizo[] getHechizosDisponibles() { return hechizosDisponibles.values().toArray(new CHechizo[0]); }
-    public EFaccion getFaccion() { return faccion; }
+    protected abstract double getMultiplicadorPropio(ETipoHabilidad tipo);
+    public EFaccion getFaccion()    { return faccion; }
+	public ENivel getNivelInicial() { return nivelInicial; }
+	public EAfinidad getAfinidad()  { return afinidad; }
     
     //helper para los hijos, necesitar ser static para llamarlo en super()
-    protected static Map<FLibroDeHechizos, CHechizo> construirHechizos(EFaccion faccion, FLibroDeHechizos[] a, FLibroDeHechizos[] b) {
-    	Set<FLibroDeHechizos> todoJunto = new HashSet<>();
-    	todoJunto.addAll(Arrays.asList(a));
-    	todoJunto.addAll(Arrays.asList(b));
+	protected static Set<FLibroDeHechizos> combinarHechizos(FLibroDeHechizos[] raciales, FLibroDeHechizos[] particulares) {
+	    Set<FLibroDeHechizos> todos = new HashSet<>();
+	    todos.addAll(Arrays.asList(raciales));
+	    todos.addAll(Arrays.asList(particulares));
+	    return todos;
+	}
 
-        Map<FLibroDeHechizos, CHechizo> hechizosDisponibles = new HashMap<>();
-        for (FLibroDeHechizos h : todoJunto) {
-            if (!h.getFacciones().contains(faccion)) {
-                throw new IllegalArgumentException(
-                    "El hechizo " + h + " no puede ser usado por " + faccion
-                );
-            }
-            
-            hechizosDisponibles.put(h, h.construir());
-        }
-        
-        return hechizosDisponibles;
-    }
+	public void aprenderHechizo(FLibroDeHechizos h) {
+	    if (hechizosDisponibles.containsKey(h)) {
+	        System.out.println("ADVERTENIA: El personaje ya conoce el hechizo: " + h);
+	        return;
+	    }
+	    if (!h.getFacciones().contains(faccion)) {
+	    	System.out.println("ADVERTENIA: El hechizo " + h + " no puede ser usado por " + faccion);
+	    	return;
+	    }
+	    if (h.getNivelRequerido().ordinal() > nivelInicial.ordinal()) {
+	    	System.out.println("ADVERTENIA: El hechizo " + h + " requiere mayor nivel");
+	    	return;
+	    }
+	    
+	    CHechizo hechizo = h.construir();
+	    if (hechizo.getAfinidad() == afinidad) 
+	    	hechizo.setBonificacion(getMultiplicadorPropio(hechizo.getTipoHabilidad())); 
+	    
+	    hechizosDisponibles.put(h, hechizo);
+	}
 }

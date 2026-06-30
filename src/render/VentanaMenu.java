@@ -1,8 +1,7 @@
 package render;
-import hogwarts.FLibroDeHechizos;
-import hogwarts.APersonaje;
-import sim.Escenario;
-import sim.SimuladorTurnos;
+import app.FLibroDeHechizos;
+import sim.IEscenarioConsulta;
+import sim.Turnero;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +9,12 @@ import java.awt.*;
 
 public class VentanaMenu extends JFrame implements InterfazUsuario {
     private static final long serialVersionUID = 1L;
+    private boolean primeraConfiguracion = true;
     private CardLayout cardLayout;
     private JPanel contenedorPrincipal;
-    private Escenario escenario;
-    private boolean modoLanzarJuego = false; // true cuando venimos de btnJugar sin escenario
+    private IEscenarioConsulta escenario;
     private JButton btnJugar; // referencia para habilitar/deshabilitar
+
 
     public VentanaMenu() {
         setTitle("Menú Principal");
@@ -22,19 +22,27 @@ public class VentanaMenu extends JFrame implements InterfazUsuario {
         setSize(500, 400);
         setLocationRelativeTo(null);
 
-        cardLayout = new CardLayout();
-        contenedorPrincipal = new JPanel(cardLayout);
-        contenedorPrincipal.setBackground(new Color(20, 20, 20));
-
-        contenedorPrincipal.add(crearPantallaMenu(),               "MENU");
-        contenedorPrincipal.add(new JPanel(),                      "CLASES");
         StringBuilder sbHechizos = new StringBuilder();
         for (FLibroDeHechizos h : FLibroDeHechizos.values()) {
             sbHechizos.append("===================================\n");
             sbHechizos.append(h.getDescripcion()).append("\n");
         }
-        contenedorPrincipal.add(new PantallaContenido(this, "Libro de Hechizos", sbHechizos.toString()), "HECHIZOS");
-        contenedorPrincipal.add(new PantallaConfiguracion(this),   "CONFIGURACION");
+        
+        cardLayout = new CardLayout();
+        contenedorPrincipal = new JPanel(cardLayout);
+        contenedorPrincipal.setBackground(new Color(20, 20, 20));
+
+        contenedorPrincipal.add(crearPantallaMenu(),
+        						EPantalla.MENU.name());
+        
+        contenedorPrincipal.add(new JPanel(),
+        						EPantalla.CLASES.name());
+        
+        contenedorPrincipal.add(new PantallaContenido(this, "Libro de Hechizos", sbHechizos.toString()),
+        						EPantalla.HECHIZOS.name());
+        
+        contenedorPrincipal.add(new PantallaConfiguracion(this),
+        						EPantalla.CONFIGURACION.name());
 
         add(contenedorPrincipal);
     }
@@ -42,35 +50,31 @@ public class VentanaMenu extends JFrame implements InterfazUsuario {
     @Override
     public void iniciar() {
         SwingUtilities.invokeLater(() -> {
-            cardLayout.show(contenedorPrincipal, "MENU");
+            cardLayout.show(contenedorPrincipal, EPantalla.MENU.name());
             setVisible(true);
         });
     }
 
-    public void cambiarPantalla(String nombrePantalla) {
-        if (nombrePantalla.equals("CLASES") && escenario == null) {
+    public void cambiarPantalla(EPantalla pantalla) {
+        if (pantalla == EPantalla.CLASES && escenario == null) {
             TemasUI.mostrarAdvertenciaTema(this, "No hay escenario cargado. Configurá uno primero.", "Sin escenario");
-            cambiarPantalla("CONFIGURACION");
+            cambiarPantalla(EPantalla.CONFIGURACION);
             return;
         }
-        cardLayout.show(contenedorPrincipal, nombrePantalla);
+        cardLayout.show(contenedorPrincipal, pantalla.name());
     }
 
-    private void lanzarJuego() {
+    private void lanzarJuego() {	
         LayoutPantalla.posicionarMenu(this);
-        cambiarPantalla("HECHIZOS");
+        cambiarPantalla(EPantalla.HECHIZOS);
         btnJugar.setEnabled(false);
 
-        SimuladorTurnos sim = new SimuladorTurnos(escenario, 10, 10);
-        VentanaJuego ventana = new VentanaJuego(sim, escenario.getNombre());
-
+        Turnero sim = escenario.crearSimulacion();
+        VentanaJuego juego = new VentanaJuego(sim);
+        
         // Al cerrar VentanaJuego → cerrar VentanaInfo y rehabilitar btnJugar
-        ventana.alCerrar(() -> {
-            btnJugar.setEnabled(true);
-            modoLanzarJuego = false;
-        });
-
-        ventana.mostrar();
+        juego.alCerrar(() -> { btnJugar.setEnabled(true); });
+        juego.mostrar();
     }
 
     private JPanel crearPantallaMenu() {
@@ -88,52 +92,42 @@ public class VentanaMenu extends JFrame implements InterfazUsuario {
         JButton btnConfigurar = new JButton("Configurar Escenario");
         JButton btnSalir      = new JButton("Salir");
 
-        for (JButton b : new JButton[]{btnJugar, btnClases, btnHechizos, btnConfigurar, btnSalir})
-            TemasUI.estilizarBoton(b);
-
         btnJugar.addActionListener(e -> {
             if (escenario == null) {
-                modoLanzarJuego = true;
-                cambiarPantalla("CONFIGURACION");
+                cambiarPantalla(EPantalla.CONFIGURACION);
                 return;
             }
             lanzarJuego();
         });
-
-        btnClases.addActionListener(e     -> cambiarPantalla("CLASES"));
-        btnHechizos.addActionListener(e   -> cambiarPantalla("HECHIZOS"));
-        btnConfigurar.addActionListener(e -> { modoLanzarJuego = false; cambiarPantalla("CONFIGURACION"); });
+        btnClases.addActionListener(e     -> cambiarPantalla(EPantalla.CLASES));
+        btnHechizos.addActionListener(e   -> cambiarPantalla(EPantalla.HECHIZOS));
+        btnConfigurar.addActionListener(e -> cambiarPantalla(EPantalla.CONFIGURACION));
         btnSalir.addActionListener(e      -> System.exit(0));
-
-        panel.add(btnJugar);
-        panel.add(btnClases);
-        panel.add(btnHechizos);
-        panel.add(btnConfigurar);
-        panel.add(btnSalir);
+        
+        JButton[] botones = {btnJugar, btnClases, btnHechizos, btnConfigurar, btnSalir};
+        for (JButton b : botones) {
+        	TemasUI.estilizarBoton(b);
+        	panel.add(b);
+        }
 
         return panel;
     }
     
-    public void asignarEscenarioYContinuar(Escenario nuevoEscenario) {
+    public void asignarEscenarioYContinuar(IEscenarioConsulta nuevoEscenario) {
         this.escenario = nuevoEscenario;
-        contenedorPrincipal.remove(1);
+        contenedorPrincipal.remove(EPantalla.CLASES.ordinal());
         
-        StringBuilder sbPersonajes = new StringBuilder();
-        for (APersonaje p : nuevoEscenario.getTodosLosPersonajes()) {
-            sbPersonajes.append("===================================\n");
-            sbPersonajes.append(p.toString()).append("\n");
-        }
-        contenedorPrincipal.add(new PantallaContenido(this, "Lista de Personajes Disponibles", sbPersonajes.toString()), "CLASES", 1);
+        contenedorPrincipal.add(
+        		new PantallaContenido(this, "Lista de Personajes Disponibles", nuevoEscenario.getDescripcionDeTodosLosPersonajes()),
+        		EPantalla.CLASES.name(),
+        		EPantalla.CLASES.ordinal()
+		);
         
-        if (modoLanzarJuego) {
+        if (primeraConfiguracion) {
+        	primeraConfiguracion = false;
             lanzarJuego();
         } else {
-            cambiarPantalla("MENU");
+            cambiarPantalla(EPantalla.MENU);
         }
-    }
-
-    public void cancelarConfiguracion() {
-        this.modoLanzarJuego = false;
-        cambiarPantalla("MENU");
     }
 }

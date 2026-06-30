@@ -1,19 +1,18 @@
 package hogwarts;
-import sim.IAfectable;
+import sim.IEstrategiaHabilidad;
 import sim.ITurnable;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 
 public final class CHechizoEncantamiento extends CHechizo {
 	private final ETipoEncantamiento tipoEncantamiento;
 
-	public CHechizoEncantamiento(
-			String nombre, String descr, int coste, int distancia, Set<EFaccion> faccionesPermitidas,
-			ETipoEncantamiento tipoEncantamiento, int valorEspecial, BiConsumer<IAfectable, IAfectable> estrategia
-	) {
-		super(nombre, descr, coste, distancia, faccionesPermitidas, tipoEncantamiento.getTipoHabilidad(), valorEspecial, estrategia);
+	public CHechizoEncantamiento(String nombre, String descr, ENivel nivelRequerido, EAfinidad afinidad, int coste, int distancia,
+			                     Set<EFaccion> faccionesPermitidas, int valorEspecial, IEstrategiaHabilidad estrategia,
+								 ETipoEncantamiento tipoEncantamiento)
+	{
+		super(nombre, descr, nivelRequerido, afinidad, coste, distancia, faccionesPermitidas, valorEspecial, estrategia, tipoEncantamiento.getTipoHabilidad());
 		this.tipoEncantamiento = tipoEncantamiento;
 	}	
 	
@@ -23,6 +22,7 @@ public final class CHechizoEncantamiento extends CHechizo {
 	@Override
 	protected String getMasDetallesEspecificos() { return "Tipo Encatamiento:   " + tipoEncantamiento + "\n"; }
 	
+	//interfaz
 	@Override
 	public ITurnable getComportamiento() { return tipoEncantamiento; }
 }

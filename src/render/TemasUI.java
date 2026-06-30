@@ -110,4 +110,29 @@ public class TemasUI {
         UIManager.put("Button.background",            null);
         UIManager.put("Button.foreground",            null);
     }
+    
+
+    public static void estilizarBotonConfirmar(JButton b) {
+        b.setBackground(new Color(50, 180, 80)); // Tu verde original
+        b.setForeground(Color.WHITE);
+        b.setOpaque(true);
+        b.setBorderPainted(false); // Evita bordes nativos feos según el OS
+        b.setFocusPainted(false);
+    }
+
+    public static void estilizarBotonPeligro(JButton b) {
+        b.setBackground(new Color(180, 50, 50)); // Tu rojo original
+        b.setForeground(Color.WHITE);
+        b.setOpaque(true);
+        b.setBorderPainted(false);
+        b.setFocusPainted(false);
+    }
+    
+    public static void estilizarBotonSaltar(JButton b) {
+        b.setBackground(new Color(190, 150, 40)); // Tu rojo original
+        b.setForeground(Color.WHITE);
+        b.setOpaque(true);
+        b.setBorderPainted(false);
+        b.setFocusPainted(false);
+    }
 }
